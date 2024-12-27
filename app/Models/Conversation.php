@@ -3,17 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Conversation extends Model
 {
-    public function userOne()
+    public function users(): BelongsToMany
     {
-        return $this->belongsTo(User::class, 'user_one_id');
-    }
-
-    public function userTwo()
-    {
-        return $this->belongsTo(User::class, 'user_two_id');
+        return $this->belongsToMany(User::class, 'conversation_users', 'conversation_id', 'user_id')
+            ->withTimestamps();
     }
 
     public function messages()
