@@ -4,9 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Conversation;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -67,10 +69,15 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-
-    public function conversations()
+    /**
+     * Get all the conversations for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function conversations(): BelongsToMany
     {
-        return $this->hasMany(Conversation::class, 'user_one_id')->orWhere('user_two_id', $this->id);
+        return $this->belongsToMany(Conversation::class, 'conversation_users', 'user_id', 'conversation_id')
+            ->withTimestamps();
     }
 
     public function messages()
