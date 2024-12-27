@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('conversations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id_one')->constrained('users')->onDelete('cascade');
-            $table->foreignId('user_id_two')->constrained('users')->onDelete('cascade');
+            $table->string('title')->nullable(); // Optional, for group chats
+            $table->boolean('is_group')->default(false);
             $table->timestamps();
-
-            $table->unique(['user_id_one', 'user_id_two']);
         });
     }
 
