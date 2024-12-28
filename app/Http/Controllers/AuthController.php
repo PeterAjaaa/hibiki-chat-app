@@ -10,8 +10,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    // Let the user register and return their the user and their JWT access token
-    // TODO: Add email verification on register, put the refresh token on user DB
+    // Let the user register and return the user instance and their JWT access token
+    // TODO: Add email verification on register
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -21,7 +21,13 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error during registration process',
+                'error' => [
+                    'error_details' => $validator->errors()
+                ]
+            ], 422);
         } else {
             $user = User::create([
                 'name' => $request->name,
@@ -29,7 +35,14 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password)
             ]);
             $token = JWTAuth::fromUser($user);
-            return response()->json((compact('user', 'token')), 201);
+            return response()->json([
+                'success' => true,
+                'message' => 'User registered successfully',
+                'data' => [
+                    'user' => $user,
+                    'token' => $token
+                ]
+            ], 201);
         }
     }
 
@@ -42,14 +55,32 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([$validator->errors()], 400);
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error during login process',
+                'error' => [
+                    'error_details' => $validator->errors()
+                ]
+            ], 422);
         } else {
             $credentials = $request->only('email', 'password');
 
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 401);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid credentials provided during login process',
+                    'error' => [
+                        'error_details' => 'Invalid credentials provided during login process'
+                    ]
+                ], 401);
             } else {
-                return response()->json((compact('token')), 200);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User logged in successfully',
+                    'data' => [
+                        'token' => $token
+                    ]
+                ], 200);
             }
         }
     }
@@ -58,7 +89,10 @@ class AuthController extends Controller
     public function logout()
     {
         JWTAuth::invalidate(JWTAuth::getToken());
-        return response()->json(['message' => 'Successfully logged out'], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Successfully logged out',
+        ], 200);
     }
 
     // Get authenticated user's details
@@ -66,10 +100,41 @@ class AuthController extends Controller
     {
         try {
             $user = JWTAuth::parseToken()->authenticate();
+            return response()->json([
+                'success' => true,
+                'message' => 'User found successfully',
+                'data' => [
+                    'user' => $user
+                ]
+            ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'User not found'], 404);
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found',
+                'error' => [
+                    'error_details' => 'User not found'
+                ]
+            ], 404);
         }
+    }
 
-        return response()->json(compact('user'));
+    // Refresh current user JWT access token
+    public function refreshAccessToken()
+    {
+        try {
+            JWTAuth::auth()->refresh(false, true);
+            return response()->json([
+                'success' => true,
+                'message' => 'Token refreshed successfully',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token refresh failed',
+                'error' => [
+                    'error_details' => 'Token refresh failed'
+                ]
+            ], 401);
+        }
     }
 }
