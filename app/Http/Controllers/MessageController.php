@@ -2,11 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
+    /**
+     * Send a new message in a specific conversation.
+     */
+    public function sendMessage(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'content' => 'required|string',
+        ]);
+        $user = auth('api')->user();
+        $conversation = Conversation::findOrFail($id);
+
+        if (!$conversation->users->contains($user->id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized',
+                'error' => [
+                    'error_details' => 'Unauthorized during message sending'
+                ]
+            ], 401);
+        } else {
+            $content = Message::create([
+                'user_id' => $user->id,
+                'conversation_id' => $conversation->id,
+                'content' => $validated['content']
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Message sent successfully',
+                'data' => [
+                    'content' => $content
+                ]
+            ], 200);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      */
