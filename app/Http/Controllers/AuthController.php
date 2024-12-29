@@ -112,7 +112,7 @@ class AuthController extends Controller
                 'success' => false,
                 'message' => 'User not found',
                 'error' => [
-                    'error_details' => 'User not found'
+                    'error_details' => $e->getMessage()
                 ]
             ], 404);
         }
@@ -122,17 +122,20 @@ class AuthController extends Controller
     public function refreshAccessToken()
     {
         try {
-            JWTAuth::auth()->refresh(false, true);
+            $newToken = auth('api')->refresh(false, true);
             return response()->json([
                 'success' => true,
                 'message' => 'Token refreshed successfully',
+                'data' => [
+                    'token' => $newToken
+                ]
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Token refresh failed',
                 'error' => [
-                    'error_details' => 'Token refresh failed'
+                    'error_details' => $e->getMessage()
                 ]
             ], 401);
         }
