@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Conversation;
 use Illuminate\Http\Request;
-use App\Models\User;
-use JWTAuth;
 
 class ConversationController extends Controller
 {
@@ -14,7 +12,7 @@ class ConversationController extends Controller
      */
     public function getAllConversation()
     {
-        $user = JWTAuth::auth('api')->user();
+        $user = auth('api')->user();
         $conversations = $user->conversations()->with('users')->latest('updated_at')->get();
 
         return response()->json([
