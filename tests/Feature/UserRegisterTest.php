@@ -5,7 +5,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-final class UserAdministrationTest extends TestCase
+final class UserRegisterTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -28,10 +28,13 @@ final class UserAdministrationTest extends TestCase
                     'message',
                     'data' => [
                         'user',
-                        'token',
+                        'token'
                     ]
                 ]
             );
+
+        $responseData = $response->json();
+        $this->assertNotEmpty($responseData['data']['token'], 'Token should not be empty');
 
         $this->assertDatabaseHas('users', [
             'name' => $userData['name'],
@@ -62,7 +65,55 @@ final class UserAdministrationTest extends TestCase
             );
     }
 
-    public function testUserRegistrationFailingValidation()
+    public function testUserRegistrationIncorrectDataType()
+    {
+        $userData = [
+            'name' => 'Test User',
+            'email' => 'testuser@example.com',
+            'password' => 12345678,
+            'password_confirmation' => 'passwordTestUserIsNotTheSame'
+        ];
+
+        $response = $this->post('/api/register', $userData);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonStructure(
+                [
+                    'success',
+                    'message',
+                    'error' => [
+                        'error_details',
+                    ]
+                ]
+            );
+    }
+
+    public function testUserRegistrationOutOfRange()
+    {
+        $userData = [
+            'email' => 'testuser@example.com',
+            'password' => '',
+            'password_confirmation' => ''
+        ];
+
+        $response = $this->post('/api/register', $userData);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonStructure(
+                [
+                    'success',
+                    'message',
+                    'error' => [
+                        'error_details',
+                    ]
+                ]
+            );
+    }
+
+
+    public function testUserRegistrationFailingPasswordConfirmation()
     {
         $userData = [
             'name' => 'Test User',
@@ -96,30 +147,6 @@ final class UserAdministrationTest extends TestCase
             'name' => 'Test User',
             'email' => 'testuser@example.com',
             'password' => 'passwordTestUser',
-            'password_confirmation' => 'passwordTestUserIsNotTheSame'
-        ];
-
-        $response = $this->post('/api/register', $userData);
-
-        $response
-            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
-                [
-                    'success',
-                    'message',
-                    'error' => [
-                        'error_details',
-                    ]
-                ]
-            );
-    }
-
-    public function testUserRegistrationIncorrectDataType()
-    {
-        $userData = [
-            'name' => 'Test User',
-            'email' => 'testuser@example.com',
-            'password' => 12345678,
             'password_confirmation' => 'passwordTestUserIsNotTheSame'
         ];
 
@@ -210,6 +237,30 @@ final class UserAdministrationTest extends TestCase
             );
     }
 
+    public function testUserRegistrationOverlyLongEmail()
+    {
+        $userData = [
+            'name' => 'Test User',
+            'email' => Str::random(100) . '@example.com',
+            'password' => 'passwordTest',
+            'password_confirmation' => 'passwordTest'
+        ];
+
+        $response = $this->post('/api/register', $userData);
+
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonStructure(
+                [
+                    'success',
+                    'message',
+                    'error' => [
+                        'error_details',
+                    ]
+                ]
+            );
+    }
+
     public function testUserRegistrationOverlyLongPassword()
     {
         $password = Str::random(100);
@@ -234,26 +285,5 @@ final class UserAdministrationTest extends TestCase
                     ]
                 ]
             );
-    }
-
-    public function testUserLogin()
-    {
-        $user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => Hash::make('passwordTest')
-        ]);
-
-        $response = $this->postJson('/api/login', [
-            'email' => 'test@example.com',
-            'password' => 'passwordTest',
-        ]);
-
-        $response->assertStatus(Response::HTTP_OK)->assertJsonStructure([
-            'success',
-            'message',
-            'data' => [
-                'token',
-            ]
-        ]);
     }
 }
