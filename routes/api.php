@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ConversationController;
-use App\Http\Controllers\MessageController;
+
+use App\Http\Controllers\{
+    AuthController,
+    ConversationController,
+    MessageController
+};
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);

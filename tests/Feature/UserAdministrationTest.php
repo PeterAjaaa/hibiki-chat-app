@@ -1,9 +1,9 @@
 <?php
 
-use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
+use Tests\TestCase;
 
 final class UserAdministrationTest extends TestCase
 {

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Conversation;
-use App\Models\Message;
 use Illuminate\Http\Request;
+
+use App\Models\{
+    Conversation,
+    Message
+};
 
 class MessageController extends Controller
 {
