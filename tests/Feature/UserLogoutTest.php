@@ -18,7 +18,7 @@ final class UserLogoutTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertJsonStructure([
+            ->assertExactJsonStructure([
                 'success',
                 'message',
             ]);
@@ -31,10 +31,14 @@ final class UserLogoutTest extends TestCase
 
         // Middleware-based exception has their own way of handling exception
         $response
-            ->assertStatus(401)
-            ->assertJsonStructure(
+            ->assertStatus(Response::HTTP_UNAUTHORIZED)
+            ->assertExactJsonStructure(
                 [
+                    'exception',
+                    'file',
+                    'line',
                     'message',
+                    'trace',
                 ]
             );
     }

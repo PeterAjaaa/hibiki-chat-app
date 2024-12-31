@@ -22,7 +22,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_CREATED)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',
@@ -54,7 +54,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',
@@ -78,7 +78,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',
@@ -101,7 +101,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',
@@ -126,7 +126,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',
@@ -154,7 +154,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',
@@ -178,7 +178,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',
@@ -202,7 +202,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',
@@ -226,7 +226,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',
@@ -250,7 +250,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',
@@ -276,7 +276,7 @@ final class UserRegisterTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
-            ->assertJsonStructure(
+            ->assertExactJsonStructure(
                 [
                     'success',
                     'message',

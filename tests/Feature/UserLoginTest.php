@@ -23,7 +23,7 @@ final class UserLoginTest extends TestCase
 
         $response
             ->assertStatus(Response::HTTP_OK)
-            ->assertJsonStructure([
+            ->assertExactJsonStructure([
                 'success',
                 'message',
                 'data' => [
@@ -41,13 +41,15 @@ final class UserLoginTest extends TestCase
             'email' => 'test@example.com',
         ]);
 
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)->assertJsonStructure([
-            'success',
-            'message',
-            'error' => [
-                'error_details'
-            ]
-        ]);
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertExactJsonStructure([
+                'success',
+                'message',
+                'error' => [
+                    'error_details'
+                ]
+            ]);
     }
 
 
@@ -58,13 +60,15 @@ final class UserLoginTest extends TestCase
             'password' => 12345678,
         ]);
 
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)->assertJsonStructure([
-            'success',
-            'message',
-            'error' => [
-                'error_details'
-            ]
-        ]);
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertExactJsonStructure([
+                'success',
+                'message',
+                'error' => [
+                    'error_details'
+                ]
+            ]);
     }
 
     public function testUserLoginOutOfRange()
@@ -74,13 +78,15 @@ final class UserLoginTest extends TestCase
             'password' => '',
         ]);
 
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)->assertJsonStructure([
-            'success',
-            'message',
-            'error' => [
-                'error_details'
-            ]
-        ]);
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertExactJsonStructure([
+                'success',
+                'message',
+                'error' => [
+                    'error_details'
+                ]
+            ]);
     }
 
     public function testUserLoginWrongCredential()
@@ -95,13 +101,15 @@ final class UserLoginTest extends TestCase
             'password' => 'passwordTestWrong',
         ]);
 
-        $response->assertStatus(Response::HTTP_UNAUTHORIZED)->assertJsonStructure([
-            'success',
-            'message',
-            'error' => [
-                'error_details'
-            ]
-        ]);
+        $response
+            ->assertStatus(Response::HTTP_UNAUTHORIZED)
+            ->assertExactJsonStructure([
+                'success',
+                'message',
+                'error' => [
+                    'error_details'
+                ]
+            ]);
     }
 
     public function testUserLoginMalformedEmail()
@@ -111,13 +119,15 @@ final class UserLoginTest extends TestCase
             'password' => 'passwordTest',
         ]);
 
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)->assertJsonStructure([
-            'success',
-            'message',
-            'error' => [
-                'error_details'
-            ]
-        ]);
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertExactJsonStructure([
+                'success',
+                'message',
+                'error' => [
+                    'error_details'
+                ]
+            ]);
     }
 
     public function testUserOverlyLongEmail()
@@ -127,13 +137,15 @@ final class UserLoginTest extends TestCase
             'password' => 'passwordTest',
         ]);
 
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)->assertJsonStructure([
-            'success',
-            'message',
-            'error' => [
-                'error_details'
-            ]
-        ]);
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertExactJsonStructure([
+                'success',
+                'message',
+                'error' => [
+                    'error_details'
+                ]
+            ]);
     }
 
     public function testUserOverlyLongPassword()
@@ -143,12 +155,14 @@ final class UserLoginTest extends TestCase
             'password' => Str::random(100)
         ]);
 
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)->assertJsonStructure([
-            'success',
-            'message',
-            'error' => [
-                'error_details'
-            ]
-        ]);
+        $response
+            ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertExactJsonStructure([
+                'success',
+                'message',
+                'error' => [
+                    'error_details'
+                ]
+            ]);
     }
 }
