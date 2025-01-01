@@ -15,14 +15,14 @@ final class ConversationTest extends TestCase
         $receiver = User::factory()->create();
         $token = auth('api')->login($sender);
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
-
-        $response = $this->postJson(
-            '/api/conversations',
-            [
-                'user_ids' => [$sender->id, $receiver->id]
-            ]
-        );
+        $response = $this
+            ->withHeader('Authorization', 'Bearer ' . $token)
+            ->postJson(
+                '/api/conversations',
+                [
+                    'user_ids' => [$sender->id, $receiver->id]
+                ]
+            );
 
 
         $response
@@ -50,17 +50,15 @@ final class ConversationTest extends TestCase
         $sender = User::factory()->create();
         $token = auth('api')->login($sender);
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
-
         // This header is needed so that the we can assert the JSON structure
-        $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
-
-        $response = $this->postJson(
-            '/api/conversations',
-            [
-                'user_ids' => []
-            ]
-        );
+        $response = $this
+            ->withHeaders(['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $token])
+            ->postJson(
+                '/api/conversations',
+                [
+                    'user_ids' => []
+                ]
+            );
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -79,17 +77,14 @@ final class ConversationTest extends TestCase
         $sender = User::factory()->create();
         $token = auth('api')->login($sender);
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
-
-        // This header is needed so that the we can assert the JSON structure
-        $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
-
-        $response = $this->postJson(
-            '/api/conversations',
-            [
-                'user_ids' => [$sender->id]
-            ]
-        );
+        $response = $this
+            ->withHeaders(['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $token])
+            ->postJson(
+                '/api/conversations',
+                [
+                    'user_ids' => [$sender->id]
+                ]
+            );
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -109,17 +104,14 @@ final class ConversationTest extends TestCase
         $receiver = User::factory()->create();
         $token = auth('api')->login($sender);
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
-
-        // This header is needed so that the we can assert the JSON structure
-        $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
-
-        $response = $this->postJson(
-            '/api/conversations',
-            [
-                'user_ids' => ['1', '2']
-            ]
-        );
+        $response = $this
+            ->withHeaders(['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $token])
+            ->postJson(
+                '/api/conversations',
+                [
+                    'user_ids' => ['1', '2']
+                ]
+            );
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -140,17 +132,14 @@ final class ConversationTest extends TestCase
         $receiver = User::factory()->create();
         $token = auth('api')->login($sender);
 
-        $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
-
-        // This header is needed so that the we can assert the JSON structure
-        $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
-
-        $response = $this->postJson(
-            '/api/conversations',
-            [
-                'user_ids' => [$sender->id, $receiver->id + 1]
-            ]
-        );
+        $response = $this
+            ->withHeaders(['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $token])
+            ->postJson(
+                '/api/conversations',
+                [
+                    'user_ids' => [$sender->id, $receiver->id + 1]
+                ]
+            );
 
         $response
             ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -166,7 +155,9 @@ final class ConversationTest extends TestCase
     public function testUserProfileUnauthorized()
     {
         // This header is needed so that the we can assert the JSON structure
-        $response = $this->withHeaders(['Accept' => 'application/json'])->post('api/conversations');
+        $response = $this
+            ->withHeaders(['Accept' => 'application/json'])
+            ->post('api/conversations');
 
         // Middleware-based exception has their own way of handling exception
         $response

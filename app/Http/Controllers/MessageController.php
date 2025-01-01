@@ -36,6 +36,7 @@ class MessageController extends Controller
                 'conversation_id' => $conversation->id,
                 'content' => $validated['content']
             ]);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Message sent successfully',

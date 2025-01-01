@@ -27,7 +27,7 @@ final class UserLogoutTest extends TestCase
     public function testUserLogoutUnauthorized()
     {
         // This header is needed so that the we can assert the JSON structure
-        $response = $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
+        $response = $this->withHeaders(['Accept' => 'application/json'])->post('api/logout');
 
         // Middleware-based exception has their own way of handling exception
         $response
