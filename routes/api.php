@@ -17,11 +17,15 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 
     Route::post('tokens/refresh', [AuthController::class, 'refreshAccessToken']);
 
-    Route::get('conversations', [ConversationController::class, 'getAllConversation']);
-    Route::get('conversations/{id}', [ConversationController::class, 'getAllMessagesFromConversation']);
+
     Route::post('conversations', [ConversationController::class, 'createNewConversation']);
     Route::post('conversations/{id}/messages', [MessageController::class, 'sendMessage']);
+
+    Route::get('conversations', [ConversationController::class, 'getAllConversation']);
+    Route::get('conversations/{id}', [ConversationController::class, 'getAllMessagesFromConversation']);
+
     Route::post('conversations/{id}/participants', [ConversationController::class, 'addParticipant']);
     Route::delete('conversations/{id}/participants', [ConversationController::class, 'removeParticipant']);
+
     Route::delete('conversations/{id}', [ConversationController::class, 'destroyConversation']);
 });
