@@ -15,8 +15,7 @@ final class ConversationTest extends TestCase
         $receiver = User::factory()->create();
         $token = auth('api')->login($sender);
 
-
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
+        $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
 
         $response = $this->postJson(
             '/api/conversations',
@@ -52,11 +51,10 @@ final class ConversationTest extends TestCase
         $sender = User::factory()->create();
         $token = auth('api')->login($sender);
 
-
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
+        $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
 
         // This header is needed so that the we can assert the JSON structure
-        $response = $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
+        $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
 
         $response = $this->postJson(
             '/api/conversations',
@@ -83,10 +81,10 @@ final class ConversationTest extends TestCase
         $token = auth('api')->login($sender);
 
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
+        $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
 
         // This header is needed so that the we can assert the JSON structure
-        $response = $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
+        $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
 
         $response = $this->postJson(
             '/api/conversations',
@@ -114,10 +112,10 @@ final class ConversationTest extends TestCase
         $token = auth('api')->login($sender);
 
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
+        $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
 
         // This header is needed so that the we can assert the JSON structure
-        $response = $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
+        $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
 
         $response = $this->postJson(
             '/api/conversations',
@@ -146,10 +144,10 @@ final class ConversationTest extends TestCase
         $token = auth('api')->login($sender);
 
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
+        $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
 
         // This header is needed so that the we can assert the JSON structure
-        $response = $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
+        $this->withHeaders(['Accept' => 'application/json'])->get('api/user');
 
         $response = $this->postJson(
             '/api/conversations',
