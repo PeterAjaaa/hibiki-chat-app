@@ -47,7 +47,6 @@ final class ConversationTest extends TestCase
 
     public function testCreateNewConversationMissingRequiredField()
     {
-
         $sender = User::factory()->create();
         $token = auth('api')->login($sender);
 
@@ -80,7 +79,6 @@ final class ConversationTest extends TestCase
         $sender = User::factory()->create();
         $token = auth('api')->login($sender);
 
-
         $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
 
         // This header is needed so that the we can assert the JSON structure
@@ -110,7 +108,6 @@ final class ConversationTest extends TestCase
         $sender = User::factory()->create();
         $receiver = User::factory()->create();
         $token = auth('api')->login($sender);
-
 
         $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
 
@@ -142,7 +139,6 @@ final class ConversationTest extends TestCase
         $sender = User::factory()->create();
         $receiver = User::factory()->create();
         $token = auth('api')->login($sender);
-
 
         $this->withHeader('Authorization', 'Bearer ' . $token)->get('api/user');
 
